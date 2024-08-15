@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "target": "esnext",
+    "module": "CommonJS",
+    "types": [
+      "node",
+    ],
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+    },
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "typeRoots": [
+      "./src"
+    ]
+  },
+  "include": [
+    "/src/**/*.ts",
+    "**/src/**/*.ts",
+    "**/__tests__/**/*.ts",
+    "/__tests__/**/*.ts",
+    "/src/**/*.d.ts",
+  ]
+}
