@@ -16,15 +16,10 @@ export default class UserController {
    * @param email:string
    * @param password:string
    */
-  async create(email: string, password: string): Promise<{
-    id: number;
-    email: string;
-    password: string;
-    links: string[];
-  }> {
+  async create(email: string, password: string): Promise<void> {
     try {
-      const newUser = await this.userService.createUser({ email, password })
-      return newUser
+      await this.userService.createUser({ email, password })
+      return
     } catch (err: any) {
       throw HttpException.factory(err.parent?.errno, err.parent?.sqlMessage);
     }

@@ -7,9 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model links {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime
+  updatedAt DateTime
+  deletedAt DateTime
+  users     users?   @relation(fields: [usersId], references: [id])
+  usersId   Int?
+}
+
+model Links {
+  id        Int       @id @default(autoincrement())
+  url       String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  deletedAt DateTime?
+  user      Users?    @relation(fields: [userId], references: [id])
+  userId    Int?
+}
+
+model Users {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  links     Links[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
 model users {
-  id       Int      @id @default(autoincrement())
-  email    String   @db.VarChar(255)
-  password String   @db.VarChar(255)
-  links    String[] @default([])
+  id        Int      @id @default(autoincrement())
+  email     String   @db.VarChar(255)
+  password  String   @db.VarChar(255)
+  links     links[]
+  createdAt DateTime
+  updatedAt DateTime
 }
