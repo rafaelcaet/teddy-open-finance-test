@@ -2,8 +2,6 @@ import { IUSerParams } from "../../interfaces/IUserParams";
 import { FastifyReply, FastifyRequest } from "fastify";
 import { IUser, IUserParams } from "../../interfaces/IUser";
 import UserController from "../../controllers/UserController";
-import { UserService } from "../../services/UserService";
-import { HttpException } from "../../helpers/HttpExceptions";
 
 
 /**
@@ -13,10 +11,9 @@ import { HttpException } from "../../helpers/HttpExceptions";
 */
 export const createOne = async (req: FastifyRequest, res: FastifyReply) => {
     const { email, password } = req.body as IUser;
-    const userService = new UserService();
-    const newUser = await userService.createUser({ email, password });
-
-    res.send(newUser);
+    const userController = new UserController()
+    const result = await userController.create(email, password);
+    res.send(result);
 };
 
 /**

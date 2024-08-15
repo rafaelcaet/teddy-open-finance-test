@@ -1,10 +1,11 @@
+import { UserService } from '../services/UserService';
 import { HttpException } from '../helpers/HttpExceptions';
 import { IUser } from '../interfaces/IUser';
 import { HttpError } from 'http-errors';
 
 export default class UserController {
   protected declare data: IUser;
-
+  private userService = new UserService()
   constructor(user?: IUser) {
     this.data = { ...user };
   }
@@ -15,9 +16,15 @@ export default class UserController {
    * @param email:string
    * @param password:string
    */
-  async create(name: string, email: string, password: string): Promise<void> {
+  async create(email: string, password: string): Promise<{
+    id: number;
+    email: string;
+    password: string;
+    links: string[];
+  }> {
     try {
-
+      const newUser = await this.userService.createUser({ email, password })
+      return newUser
     } catch (err: any) {
       throw HttpException.factory(err.parent?.errno, err.parent?.sqlMessage);
     }
