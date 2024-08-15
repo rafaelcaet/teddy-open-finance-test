@@ -11,11 +11,13 @@ export default class UserController {
 
   /**
    * create a user record on db
-   * @param wallet:string
+   * @param wname:string
+   * @param email:string
+   * @param password:string
    */
   async create(name: string, email: string, password: string): Promise<void> {
     try {
-      /**criar usuario no banco com sequelize */
+
     } catch (err: any) {
       throw HttpException.factory(err.parent?.errno, err.parent?.sqlMessage);
     }

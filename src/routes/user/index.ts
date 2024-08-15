@@ -5,13 +5,11 @@ import {
     getLinks,
     update,
 } from './user';
-
 /**
  * Exports the users actions routes.
  * @param {*} router
  */
 export const user = async (router: any) => {
-    // Create user
     router.post('/', cfg.route({ requiresAuth: false }), createOne);
 
     // Delete user

@@ -1,21 +1,13 @@
-// // Dependencies
 import fastify from 'fastify';
 import cors from '@fastify/cors';
 import { router } from './routes';
-import db from './database';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
-
-
 process.setMaxListeners(15);
-/*
- * Mounts the server
- *
- * @returns {FastifyInstance} app
- */
+
 export default async function mount() {
-    const app = fastify({ logger: true, bodyLimit: 8548576 });
+    const app = fastify({ logger: true });
 
     await app.register(cors, {
         methods: 'HEAD, OPTIONS, PUT, POST, PATCH, GET, DELETE',
@@ -25,12 +17,12 @@ export default async function mount() {
         origin: '*',
     });
 
+
     /* Register routes */
     await router(app);
 
     return {
         app,
-        database: db.sequelize.sync(),
     };
 }
 

@@ -3,12 +3,6 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { routes } from './routes';
 import { IUser } from '../interfaces/IUser';
 
-/**
- * This function prepares the routes to be instantiated
- *
- * @param app Fastify instance
- * @returns {Promise<any>} unresolved promise
- */
 export async function router(app: any): Promise<any> {
     // Status check route
     app.get('/', (req: FastifyRequest, res: FastifyReply) => {

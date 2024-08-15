@@ -6,6 +6,11 @@
     "types": [
       "node",
     ],
+    "typeRoots": [
+      "./src/types",
+      "./node_modules/@types",
+      "./src"
+    ],
     "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -25,9 +30,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "typeRoots": [
-      "./src"
-    ]
   },
   "include": [
     "/src/**/*.ts",
