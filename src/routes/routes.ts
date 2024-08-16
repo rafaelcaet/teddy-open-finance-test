@@ -1,3 +1,4 @@
+import { auth } from "./auth";
 import { user } from "./user";
 
 /**
@@ -9,5 +10,6 @@ import { user } from "./user";
 export function routes(app: any): Promise<any>[] {
     return [
         app.register(user, { prefix: '/user' }),
+        app.register(auth, { prefix: '/auth' })
     ];
 }

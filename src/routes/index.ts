@@ -8,6 +8,7 @@ export async function router(app: any): Promise<any> {
     app.get('/', (req: FastifyRequest, res: FastifyReply) => {
         res.code(204).send('Ok.');
     });
+
     app.post('/auth', async (req: FastifyRequest, res: FastifyReply) => {
         try {
             const { email, password } = req.body as IUser;

@@ -12,23 +12,28 @@ export default class UserController {
 
   /**
    * create a user record on db
-   * @param wname:string
    * @param email:string
    * @param password:string
    */
-  async create(email: string, password: string): Promise<void> {
-    try {
-      await this.userService.createUser({ email, password })
-      return
-    } catch (err: any) {
-      throw HttpException.factory(err.parent?.errno, err.parent?.sqlMessage);
-    }
+  async create(email: string, password: string): Promise<{ id: number }> {
+
+    return this.userService.createUser({ email, password })
+  }
+
+  /**
+   * get a user record from db
+   * @param id:number
+   */
+  async getById(id: number): Promise<any> {
+
+    return this.userService.getUserByEmail(id)
+
   }
 
   /**
    * delete a user record on db
    * @param wallet:string
-   */
+  */
   async delete(id: number): Promise<void> {
     try {
       /**deletar o usuario colocando data de delete no banco de dados */
@@ -48,6 +53,7 @@ export default class UserController {
       throw HttpException.userNotFound();
     }
   }
+
 
 
 

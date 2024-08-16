@@ -1,7 +1,7 @@
-import { IUSerParams } from "../../interfaces/IUserParams";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { IUser, IUserParams } from "../../interfaces/IUser";
 import UserController from "../../controllers/UserController";
+import { IUSerParams } from "../../interfaces/IUserParams";
+import { IUser } from "../../interfaces/IUser";
 
 
 /**
@@ -13,6 +13,18 @@ export const createOne = async (req: FastifyRequest, res: FastifyReply) => {
     const { email, password } = req.body as IUser;
     const userController = new UserController()
     const result = await userController.create(email, password);
+    res.send(result);
+};
+
+/**
+ * get one user
+ * @param req
+ * @param res
+*/
+export const getById = async (req: FastifyRequest, res: FastifyReply) => {
+    const { id } = req.params as IUSerParams;
+    const userController = new UserController()
+    const result = await userController.getById(id);
     res.send(result);
 };
 
@@ -46,7 +58,7 @@ export const getLinks = async (req: FastifyRequest, res: FastifyReply) => {
  * @param res:FastifyReply
  */
 export const update = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params as IUserParams;
+    const { id } = req.params as IUSerParams;
     const { newName, email } = req.body as { newName: string, email: string }
     const userController = new UserController();
     const result = await userController.update(id, newName, email);

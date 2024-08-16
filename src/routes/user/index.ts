@@ -2,28 +2,29 @@ import { cfg } from './../../middlewares/config';
 import {
     createOne,
     deleteOne,
-    getLinks,
+    getById,
     update,
 } from './user';
 /**
  * Exports the users actions routes.
  * @param {*} router
  */
-export const user = async (router: any) => {
-    router.post('/', cfg.route({ requiresAuth: false }), createOne);
+export const user = async (app: any) => {
+    app.post('/', createOne);
 
     // Delete user
-    router.delete(
+    app.delete(
         '/:id',
         cfg.route({ requiresAuth: true }),
         deleteOne,
     );
 
+    app.get('/:id', { preValidation: [app.authenticate] }, getById)
     // Get user
-    router.get('/links', cfg.route({ requiresAuth: true }), getLinks);
+    // app.getLinks('/links', cfg.route({ requiresAuth: true }), getLinks);
 
     // Update user
-    router.put(
+    app.put(
         '/:id',
         cfg.route({ requiresAuth: true }),
         update,

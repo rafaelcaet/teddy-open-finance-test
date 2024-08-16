@@ -1,18 +1,29 @@
+import { HttpException } from '../helpers/HttpExceptions';
+import { IUser } from '@/interfaces/IUser';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export class UserService {
-    async createUser(data: { email: string; password: string }) {
-        return prisma.users.create({
-            data,
-        });
+    async createUser(data: { email: string; password: string }): Promise<{ id: number }> {
+        try {
+            const { id } = await prisma.users.create({
+                data,
+            });
+            return { id }
+        } catch (err) {
+            throw HttpException.userAlreadyExists()
+        }
     }
 
-    async getUserById(id: number) {
-        return prisma.users.findUnique({
-            where: { id },
-        });
+    async getUserByEmail(id: number) {
+        try {
+            id = +id
+            const { email, createdAt } = await prisma.users.findUnique({
+                where: { id },
+            });
+            return { email: email, memberSince: createdAt }
+        } catch (err) { throw HttpException.userNotFound() }
     }
 
     /**criar um end point para poder editar os links do usuario

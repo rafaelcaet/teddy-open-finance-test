@@ -2,6 +2,7 @@ import fastify from 'fastify';
 import cors from '@fastify/cors';
 import { router } from './routes';
 import * as dotenv from 'dotenv';
+import jwtPlugin from './plugins/jwt';
 
 dotenv.config();
 process.setMaxListeners(15);
@@ -17,6 +18,8 @@ export default async function mount() {
         origin: '*',
     });
 
+    /* Register JWT */
+    await app.register(jwtPlugin)
 
     /* Register routes */
     await router(app);
