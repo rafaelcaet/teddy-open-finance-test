@@ -25,14 +25,6 @@ export class HttpException {
         return createError(422, msg || 'Unprocessable entity');
     }
 
-    static companyNotFound(msg?: string) {
-        return createError(422, msg || 'Company not found');
-    }
-
-    static teamNotFound(msg?: string) {
-        return createError(422, msg || 'Team not found');
-    }
-
     static userNotFound(msg?: string) {
         return createError(422, msg || 'User not found');
     }

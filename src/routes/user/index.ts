@@ -1,8 +1,9 @@
-import { cfg } from './../../middlewares/config';
 import {
+    addLink,
     createOne,
     deleteOne,
     getById,
+    getLinks,
     update,
 } from './user';
 /**
@@ -10,23 +11,22 @@ import {
  * @param {*} router
  */
 export const user = async (app: any) => {
-    app.post('/', createOne);
 
-    // Delete user
+    app.post('/', createOne);
+    app.post('/:id/send', addLink)
+
     app.delete(
         '/:id',
-        cfg.route({ requiresAuth: true }),
+        { preValidation: [app.authenticate] },
         deleteOne,
     );
 
     app.get('/:id', { preValidation: [app.authenticate] }, getById)
-    // Get user
-    // app.getLinks('/links', cfg.route({ requiresAuth: true }), getLinks);
+    app.get('/:id/links', { preValidation: [app.authenticate] }, getLinks);
 
-    // Update user
     app.put(
         '/:id',
-        cfg.route({ requiresAuth: true }),
+        { preValidation: [app.authenticate] },
         update,
     );
 };

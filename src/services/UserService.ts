@@ -16,22 +16,54 @@ export class UserService {
         }
     }
 
-    async getUserByEmail(id: number) {
+    async getUserByEmail(userId: number) {
         try {
-            id = +id
             const { email, createdAt } = await prisma.users.findUnique({
-                where: { id },
+                where: { id: +userId },
             });
             return { email: email, memberSince: createdAt }
         } catch (err) { throw HttpException.userNotFound() }
     }
 
-    /**criar um end point para poder editar os links do usuario
-     * o usuario deve ser capaz de editar os enderecos de destino
-     * 
-     * 
-     */
+    async getUserLinks(userId: number) {
+        try {
 
+            const links = await prisma.users.findUnique({
+                where: {
+                    id: +userId,
+                },
+                select: {
+                    links: {
+                        select: {
+                            url: true
+                        }
+                    },
+                },
+            })
+            if (!links)
+                throw HttpException.userNotFound()
+            return links
+        } catch (err) { throw HttpException.userNotFound() }
+    }
+
+    async addLinkToUser(userId: number, url: string) {
+        try {
+            if (!url)
+                throw HttpException.forbidden("invalid uRL")
+            console.log('````', url, userId)
+            await prisma.links.create({
+                data: {
+                    url,
+                    user: {
+                        connect: { id: +userId },
+                    },
+                },
+            });
+            return "uRL was created at"
+        } catch (err) {
+            throw HttpException.userNotFound()
+        }
+    }
 
     async updateUser(id: number, data: { name?: string; email?: string }) {
         return prisma.users.update({

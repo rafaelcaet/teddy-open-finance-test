@@ -41,17 +41,29 @@ export const deleteOne = async (req: FastifyRequest, res: FastifyReply) => {
 };
 
 /**
- * get a user
+ * get user links
  * @param req
  * @param res
  */
 export const getLinks = async (req: FastifyRequest, res: FastifyReply) => {
-    const { email } = req.body as IUser;
+    const { id } = req.params as IUSerParams;
     const userController = new UserController();
-    const result = await userController.getLinksByEmail(email);
+    const result = await userController.getLinksById(id);
     res.send(result);
 };
 
+/**
+ * add links to user
+ * @param req
+ * @param res
+ */
+export const addLink = async (req: FastifyRequest, res: FastifyReply) => {
+    const { id } = req.params as IUSerParams;
+    const { url } = req.body as { url: string }
+    const userController = new UserController();
+    const result = await userController.addLink(id, url);
+    res.send(result);
+};
 /**
  * update a user
  * @param req:IResquest

@@ -1,7 +1,6 @@
 import { UserService } from '../services/UserService';
 import { HttpException } from '../helpers/HttpExceptions';
 import { IUser } from '../interfaces/IUser';
-import { HttpError } from 'http-errors';
 
 export default class UserController {
   protected declare data: IUser;
@@ -46,15 +45,13 @@ export default class UserController {
    * get a user record from db
    * @param wallet:string
    */
-  async getLinksByEmail(email: string): Promise<void> {
-    try {
-      /**puxar o usuario do banco */
-    } catch (err: any) {
-      throw HttpException.userNotFound();
-    }
+  async getLinksById(id: number): Promise<any> {
+    return this.userService.getUserLinks(id)
   }
 
-
+  async addLink(id: number, url: string): Promise<any> {
+    return this.userService.addLinkToUser(id, url)
+  }
 
 
   /**
