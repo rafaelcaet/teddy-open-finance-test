@@ -19,6 +19,15 @@ export class UserService {
     async checkClicks(code: string): Promise<string> {
         const shortUrl = `http://localhost:${process.env.PORT}/` + code
         try {
+            const { url } = await prisma.links.findFirst({
+                where: {
+                    shortUrl
+                }, select: {
+                    url: true
+                }
+            })
+            if (!url)
+                return ''
             await prisma.links.update({
                 where: {
                     shortUrl
@@ -29,13 +38,6 @@ export class UserService {
                 },
             })
 
-            const { url } = await prisma.links.findFirst({
-                where: {
-                    shortUrl
-                }, select: {
-                    url: true
-                }
-            })
             return url
         } catch (err) {
             throw HttpException.forbidden()
@@ -111,19 +113,29 @@ export class UserService {
         } catch (err) { throw HttpException.userNotFound() }
     }
 
-    async addLinkToUser(userId: number, url: string) {
+    async addLinkToUser(url: string, email?: string,) {
         try {
             if (!url)
                 throw HttpException.forbidden("invalid uRL")
 
             const code = generateCode(6);
             const shortUrl = `http://localhost:${process.env.PORT}/` + code
+
+            if (!email) {
+                await prisma.links.create({
+                    data: {
+                        url,
+                        shortUrl,
+                    },
+                })
+                return { original: url, shorted: shortUrl }
+            }
             await prisma.links.create({
                 data: {
                     url,
                     shortUrl,
                     user: {
-                        connect: { id: +userId },
+                        connect: { email },
                     },
                 },
             })
@@ -139,6 +151,12 @@ export class UserService {
 
             const code = generateCode(6);
             const shortUrl = `http://localhost:${process.env.PORT}/` + code
+            await prisma.links.create({
+                data: {
+                    url,
+                    shortUrl,
+                },
+            })
             return { original: url, shorted: shortUrl }
         } catch (err) {
             throw HttpException.userNotFound()

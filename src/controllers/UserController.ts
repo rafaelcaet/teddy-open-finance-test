@@ -37,12 +37,8 @@ export default class UserController {
   }
 
   async addLink(url: string, email?: string): Promise<any> {
-    let userId
-    if (email) {
-      userId = await this.userService.getUserId(email)
-      return this.userService.addLinkToUser(userId, url)
-    }
-    return this.userService.generateLink(url)
+
+    return this.userService.addLinkToUser(url, email)
   }
 
   async updateLink(newUrl: string, shortUrl: string): Promise<string> {
