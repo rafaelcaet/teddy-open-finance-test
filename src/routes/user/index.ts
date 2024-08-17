@@ -14,7 +14,7 @@ import {
 export const user = async (app: any) => {
 
     app.post('/', createOne);
-    app.post('/sendurl', { preValidation: [app.authenticate] }, addLink)
+    app.post('/sendurl', addLink)
 
     app.delete(
         '/',

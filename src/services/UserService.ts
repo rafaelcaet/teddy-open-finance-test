@@ -132,6 +132,18 @@ export class UserService {
             throw HttpException.userNotFound()
         }
     }
+    async generateLink(url: string) {
+        try {
+            if (!url)
+                throw HttpException.forbidden("invalid uRL")
+
+            const code = generateCode(6);
+            const shortUrl = `http://localhost:${process.env.PORT}/` + code
+            return { original: url, shorted: shortUrl }
+        } catch (err) {
+            throw HttpException.userNotFound()
+        }
+    }
 
     async updateLink(newUrl: string, shortUrl: string) {
         try {

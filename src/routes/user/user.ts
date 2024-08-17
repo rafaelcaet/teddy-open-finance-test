@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import UserController from "../../controllers/UserController";
-import { IUSerParams } from "../../interfaces/IUserParams";
 import { IUser } from "../../interfaces/IUser";
+import * as jwt from 'jsonwebtoken'
 
 
 /**
@@ -70,10 +70,16 @@ export const checkClicks = async (req: FastifyRequest, res: FastifyReply) => {
  * @param res
  */
 export const addLink = async (req: FastifyRequest, res: FastifyReply) => {
-    const { email } = req.user as { email: string };
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+    let email: string
+    if (token) {
+        const result = jwt.verify(token, process.env.JWT_SECRET as string) as { email: string };
+        email = result.email
+    }
     const { url } = req.body as { url: string }
     const userController = new UserController();
-    const result = await userController.addLink(email, url);
+    const result = await userController.addLink(url, email);
     res.send(result);
 };
 
