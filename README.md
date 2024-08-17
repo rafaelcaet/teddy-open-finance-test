@@ -64,7 +64,7 @@ This project is a URL shortener application built with Fastify, TypeScript, and 
    ```
 
 ## Routes
-    - Following postman documentation: [postman-teddy-open-finance-test](https://documenter.getpostman.com/view/22405285/2sA3s9C8HW)
+- Following postman documentation: [postman-teddy-open-finance-test](https://documenter.getpostman.com/view/22405285/2sA3s9C8HW)
 ### User Routes
 
 - **POST `/user`**: Create a new user.
