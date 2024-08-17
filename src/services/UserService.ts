@@ -1,6 +1,7 @@
+import { verifyPassword } from '../utils/unhashPassword';
 import { HttpException } from '../helpers/HttpExceptions';
-import { IUser } from '@/interfaces/IUser';
 import { PrismaClient } from '@prisma/client';
+import shortid from 'shortid'
 
 const prisma = new PrismaClient();
 
@@ -16,12 +17,35 @@ export class UserService {
         }
     }
 
-    async getUserByEmail(userId: number) {
+    async getUserId(userEmail: string): Promise<number> {
+        const userId = await prisma.users.findUnique({
+            where: { email: userEmail }, select: { id: true }
+        })
+        return userId.id
+    }
+
+    async getUserById(userId: number): Promise<{ email: string, links: any }> {
         try {
-            const { email, createdAt } = await prisma.users.findUnique({
-                where: { id: +userId },
+
+            const { email, links } = await prisma.users.findUnique({
+                where: { id: +userId }, select: { email: true, links: true }
             });
-            return { email: email, memberSince: createdAt }
+            return { email, links }
+        } catch (err) { throw HttpException.userNotFound() }
+    }
+
+    async getUserLogin(email: string, password: string): Promise<{ id: number }> {
+        try {
+            const result = await prisma.users.findUnique({
+                where: { email: email }, select: { password: true }
+            })
+            if (!await verifyPassword(password, result.password))
+                return null
+            const userId = await prisma.users.findUnique({
+                where: { email: email }, select: { id: true }
+            });
+            return userId
+
         } catch (err) { throw HttpException.userNotFound() }
     }
 
@@ -46,20 +70,35 @@ export class UserService {
         } catch (err) { throw HttpException.userNotFound() }
     }
 
+    generateCode(size: number) {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        const charsLength = chars.length;
+
+        for (let i = 0; i < size; i++) {
+            result += chars.charAt(Math.floor(Math.random() * charsLength));
+        }
+
+        return result;
+    }
+
     async addLinkToUser(userId: number, url: string) {
         try {
             if (!url)
                 throw HttpException.forbidden("invalid uRL")
-            console.log('````', url, userId)
+
+            const code = this.generateCode(6);
+            const shortUrl = 'http://localhost:3000/' + code
             await prisma.links.create({
                 data: {
                     url,
+                    shortUrl,
                     user: {
                         connect: { id: +userId },
                     },
                 },
-            });
-            return "uRL was created at"
+            })
+            return { original: url, shorted: shortUrl }
         } catch (err) {
             throw HttpException.userNotFound()
         }

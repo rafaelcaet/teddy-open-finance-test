@@ -13,7 +13,7 @@ import {
 export const user = async (app: any) => {
 
     app.post('/', createOne);
-    app.post('/:id/send', addLink)
+    app.post('/sendurl', { preValidation: [app.authenticate] }, addLink)
 
     app.delete(
         '/:id',
@@ -21,8 +21,8 @@ export const user = async (app: any) => {
         deleteOne,
     );
 
-    app.get('/:id', { preValidation: [app.authenticate] }, getById)
-    app.get('/:id/links', { preValidation: [app.authenticate] }, getLinks);
+    app.get('/', { preValidation: [app.authenticate] }, getById)
+    app.get('/urls', { preValidation: [app.authenticate] }, getLinks);
 
     app.put(
         '/:id',

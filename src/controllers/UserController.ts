@@ -1,7 +1,7 @@
 import { UserService } from '../services/UserService';
 import { HttpException } from '../helpers/HttpExceptions';
 import { IUser } from '../interfaces/IUser';
-
+import { hashPassword } from '../utils/hashPassword';
 export default class UserController {
   protected declare data: IUser;
   private userService = new UserService()
@@ -14,9 +14,9 @@ export default class UserController {
    * @param email:string
    * @param password:string
    */
-  async create(email: string, password: string): Promise<{ id: number }> {
-
-    return this.userService.createUser({ email, password })
+  async create(email: string, pw: string): Promise<{ id: number }> {
+    const hashedPassword = await hashPassword(pw)
+    return this.userService.createUser({ email, password: hashedPassword })
   }
 
   /**
@@ -25,7 +25,7 @@ export default class UserController {
    */
   async getById(id: number): Promise<any> {
 
-    return this.userService.getUserByEmail(id)
+    return this.userService.getUserById(id)
 
   }
 
@@ -45,12 +45,14 @@ export default class UserController {
    * get a user record from db
    * @param wallet:string
    */
-  async getLinksById(id: number): Promise<any> {
-    return this.userService.getUserLinks(id)
+  async getLinksByEmail(email: string): Promise<any> {
+    const userId = await this.userService.getUserId(email)
+    return this.userService.getUserLinks(userId)
   }
 
-  async addLink(id: number, url: string): Promise<any> {
-    return this.userService.addLinkToUser(id, url)
+  async addLink(email: string, url: string): Promise<any> {
+    const userId = await this.userService.getUserId(email)
+    return this.userService.addLinkToUser(userId, url)
   }
 
 

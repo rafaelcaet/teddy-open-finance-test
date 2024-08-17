@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import UserController from "../../controllers/UserController";
 import { IUSerParams } from "../../interfaces/IUserParams";
 import { IUser } from "../../interfaces/IUser";
+import { FastifyJWT } from "@fastify/jwt";
 
 
 /**
@@ -22,10 +23,11 @@ export const createOne = async (req: FastifyRequest, res: FastifyReply) => {
  * @param res
 */
 export const getById = async (req: FastifyRequest, res: FastifyReply) => {
+    const { email } = req.user as { email: string }
     const { id } = req.params as IUSerParams;
     const userController = new UserController()
     const result = await userController.getById(id);
-    res.send(result);
+    res.send({ result, userEmail: email });
 };
 
 /**
@@ -46,9 +48,9 @@ export const deleteOne = async (req: FastifyRequest, res: FastifyReply) => {
  * @param res
  */
 export const getLinks = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params as IUSerParams;
+    const { email } = req.user as { email: string };
     const userController = new UserController();
-    const result = await userController.getLinksById(id);
+    const result = await userController.getLinksByEmail(email);
     res.send(result);
 };
 
@@ -58,10 +60,10 @@ export const getLinks = async (req: FastifyRequest, res: FastifyReply) => {
  * @param res
  */
 export const addLink = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params as IUSerParams;
+    const { email } = req.user as { email: string };
     const { url } = req.body as { url: string }
     const userController = new UserController();
-    const result = await userController.addLink(id, url);
+    const result = await userController.addLink(email, url);
     res.send(result);
 };
 /**
