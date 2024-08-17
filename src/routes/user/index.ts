@@ -1,6 +1,5 @@
 import {
     addLink,
-    checkClicks,
     createOne,
     deleteOne,
     getByEmail,

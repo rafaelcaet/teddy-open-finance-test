@@ -1,7 +1,7 @@
 import { UserService } from '../../services/UserService';
 import { HttpException } from '../../helpers/HttpExceptions';
 import { ILoginBody } from '../../interfaces/ILoginBody';
-import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest, FastifyReply } from 'fastify';
 
 
 export async function auth(app: any) {
@@ -16,7 +16,4 @@ export async function auth(app: any) {
         const token = app.jwt.sign({ email });
         return rep.send({ token });
     });
-
-    // Rota protegida
-    // app.get('/protected', { preValidation: [app.authenticate] }, );
 }
