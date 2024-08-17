@@ -34,12 +34,11 @@ export const getByEmail = async (req: FastifyRequest, res: FastifyReply) => {
  * @param res
  */
 export const deleteOne = async (req: FastifyRequest, res: FastifyReply) => {
-    const { email, password } = req.body as IUser;
+    const { shortUrl } = req.body as { shortUrl: string };
     const userController = new UserController()
-    const result = await userController.create(email, password);
+    const result = await userController.delete(shortUrl);
     res.send(result);
 };
-
 
 /**
  * get user links
@@ -65,8 +64,6 @@ export const checkClicks = async (req: FastifyRequest, res: FastifyReply) => {
     return res.redirect(result);
 }
 
-
-
 /**
  * add links to user
  * @param req
@@ -79,16 +76,16 @@ export const addLink = async (req: FastifyRequest, res: FastifyReply) => {
     const result = await userController.addLink(email, url);
     res.send(result);
 };
+
 /**
- * update a user
+ * update a user link
  * @param req
  * @param res
  */
 export const update = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params as IUSerParams;
-    const { newName, email } = req.body as { newName: string, email: string }
+    const { newUrl, shortUrl } = req.body as { newUrl: string, shortUrl: string };
     const userController = new UserController();
-    const result = await userController.update(id, newName, email);
+    const result = await userController.updateLink(newUrl, shortUrl);
     res.send(result);
 };
 

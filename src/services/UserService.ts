@@ -1,8 +1,7 @@
 import { verifyPassword } from '../utils/unhashPassword';
 import { HttpException } from '../helpers/HttpExceptions';
 import { PrismaClient } from '@prisma/client';
-import shortid from 'shortid'
-
+import { generateCode } from '../utils/generateCode'
 const prisma = new PrismaClient();
 
 export class UserService {
@@ -54,7 +53,17 @@ export class UserService {
         try {
 
             const { email, links } = await prisma.users.findUnique({
-                where: { email: userEmail }, select: { email: true, links: true }
+                where: {
+                    email: userEmail
+                }, select: {
+                    email: true,
+                    links: {
+                        where: {
+                            deletedAt: null,
+                        },
+                    },
+                },
+
             });
             return { email, links }
         } catch (err) { throw HttpException.userNotFound() }
@@ -84,30 +93,22 @@ export class UserService {
                 },
                 select: {
                     links: {
+                        where: {
+                            deletedAt: null
+                        },
                         select: {
                             url: true,
                             shortUrl: true,
-                            clicks: true
-                        }
+                            clicks: true,
+                        },
                     },
                 },
-            })
+            });
+
             if (!links)
                 throw HttpException.userNotFound()
             return links
         } catch (err) { throw HttpException.userNotFound() }
-    }
-
-    generateCode(size: number) {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        const charsLength = chars.length;
-
-        for (let i = 0; i < size; i++) {
-            result += chars.charAt(Math.floor(Math.random() * charsLength));
-        }
-
-        return result;
     }
 
     async addLinkToUser(userId: number, url: string) {
@@ -115,7 +116,7 @@ export class UserService {
             if (!url)
                 throw HttpException.forbidden("invalid uRL")
 
-            const code = this.generateCode(6);
+            const code = generateCode(6);
             const shortUrl = `http://localhost:${process.env.PORT}/` + code
             await prisma.links.create({
                 data: {
@@ -132,16 +133,36 @@ export class UserService {
         }
     }
 
-    async updateUser(id: number, data: { name?: string; email?: string }) {
-        return prisma.users.update({
-            where: { id },
-            data,
-        });
+    async updateLink(newUrl: string, shortUrl: string) {
+        try {
+            await prisma.links.update({
+                where: {
+                    shortUrl,
+                    deletedAt: null,
+                },
+                data: {
+                    url: newUrl,
+                },
+            });
+            return `${shortUrl} was updated to ${newUrl}`;
+        }
+        catch (err) {
+            throw HttpException.unprocessableEntity("Url not found")
+        }
     }
 
-    async deleteUser(id: number) {
-        return prisma.users.delete({
-            where: { id },
-        });
+    async deleteLink(shortUrl: string) {
+        try {
+            await prisma.links.update({
+                where: {
+                    shortUrl
+                }, data: {
+                    deletedAt: new Date(),
+                },
+            })
+            return (`${shortUrl} was deleted`)
+        } catch (err) {
+            throw HttpException.unprocessableEntity("Url not found")
+        }
     }
 }

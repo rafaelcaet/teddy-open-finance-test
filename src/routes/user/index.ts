@@ -17,7 +17,7 @@ export const user = async (app: any) => {
     app.post('/sendurl', { preValidation: [app.authenticate] }, addLink)
 
     app.delete(
-        '/:id',
+        '/',
         { preValidation: [app.authenticate] },
         deleteOne,
     );
@@ -26,7 +26,7 @@ export const user = async (app: any) => {
     app.get('/urls', { preValidation: [app.authenticate] }, getLinks);
 
     app.put(
-        '/:id',
+        '/updateUrl',
         { preValidation: [app.authenticate] },
         update,
     );

@@ -7,11 +7,11 @@ export default fp(async (server: FastifyInstance) => {
         secret: process.env.JWT_SECRET,
     });
 
-    server.decorate('authenticate', async (req: FastifyRequest, rep: FastifyReply) => {
+    server.decorate('authenticate', async (req: FastifyRequest, res: FastifyReply) => {
         try {
             await req.jwtVerify();
         } catch (err) {
-            return rep.send(err.error);
+            return res.status(401).send({ error: 'Unauthorized' });
         }
     });
 });
