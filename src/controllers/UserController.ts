@@ -30,7 +30,7 @@ export default class UserController {
   }
 
 
-  async checkClicks(code: string): Promise<any> {
+  async checkClicks(code: string): Promise<string> {
 
     return this.userService.checkClicks(code)
   }

@@ -29,7 +29,15 @@ export class UserService {
                     },
                 },
             })
-            return "url updated"
+
+            const { url } = await prisma.links.findFirst({
+                where: {
+                    shortUrl
+                }, select: {
+                    url: true
+                }
+            })
+            return url
         } catch (err) {
             throw HttpException.forbidden()
         }

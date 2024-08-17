@@ -34,11 +34,12 @@ export const getByEmail = async (req: FastifyRequest, res: FastifyReply) => {
  * @param res
  */
 export const deleteOne = async (req: FastifyRequest, res: FastifyReply) => {
-    const { id } = req.params as IUSerParams;
-    const userController = new UserController();
-    const result = await userController.delete(id);
+    const { email, password } = req.body as IUser;
+    const userController = new UserController()
+    const result = await userController.create(email, password);
     res.send(result);
 };
+
 
 /**
  * get user links
@@ -53,12 +54,17 @@ export const getLinks = async (req: FastifyRequest, res: FastifyReply) => {
 };
 
 export const checkClicks = async (req: FastifyRequest, res: FastifyReply) => {
-
     const { code } = req.params as { code: string };
     const userController = new UserController();
     const result = await userController.checkClicks(code);
-    res.send(result);
+
+    if (!result) {
+        return res.status(404).send({ message: 'Url not found' });
+    }
+
+    return res.redirect(result);
 }
+
 
 
 /**
