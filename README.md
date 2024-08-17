@@ -11,7 +11,6 @@ This project is a URL shortener application built with Fastify, TypeScript, and 
 
 - **User Registration and Management**
   - Create a user account.
-  - Delete your account (requires authentication).
   - Retrieve user information by email (requires authentication).
   - Add, retrieve, update, and delete shortened URLs (requires authentication).
 
@@ -32,8 +31,7 @@ This project is a URL shortener application built with Fastify, TypeScript, and 
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-repo/url-shortener.git
-   cd url-shortener
+   git clone https://github.com/rafaelcaet/teddy-open-finance-test.git
    ```
 
 2. **Install dependencies:**
@@ -50,6 +48,9 @@ This project is a URL shortener application built with Fastify, TypeScript, and 
    - Configure your `.env` file with the necessary environment variables for your database and JWT secrets. `.env-example`
    - To connect to the database, just fill up the following variables on .env file:
           DATABASE_URL=
+          PORT=
+          HOST= 
+          JWT_SECRET=
 
 4. **Initialize Prisma:**
    ```bash
@@ -63,7 +64,7 @@ This project is a URL shortener application built with Fastify, TypeScript, and 
    ```
 
 ## Routes
-
+    - Following postman documentation: https://documenter.getpostman.com/view/22405285/2sA3s9C8HW
 ### User Routes
 
 - **POST `/user`**: Create a new user.
@@ -77,7 +78,7 @@ This project is a URL shortener application built with Fastify, TypeScript, and 
         }
         
         ```
-- **DELETE `/user`**: Delete your user account (requires authentication).
+- **DELETE `/user`**: Delete a specific URL (requires authentication).
 - **GET `/user`**: Retrieve user details by email (requires authentication).
 - **GET `/user/urls`**: Retrieve all your shortened URLs (requires authentication).
 - **PUT `/user/updateUrl`**: Update a specific URL (requires authentication).
