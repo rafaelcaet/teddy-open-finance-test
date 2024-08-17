@@ -17,6 +17,24 @@ export class UserService {
         }
     }
 
+    async checkClicks(code: string): Promise<string> {
+        const shortUrl = `http://localhost:${process.env.PORT}/` + code
+        try {
+            await prisma.links.update({
+                where: {
+                    shortUrl
+                }, data: {
+                    clicks: {
+                        increment: 1,
+                    },
+                },
+            })
+            return "url updated"
+        } catch (err) {
+            throw HttpException.forbidden()
+        }
+
+    }
     async getUserId(userEmail: string): Promise<number> {
         const userId = await prisma.users.findUnique({
             where: { email: userEmail }, select: { id: true }
@@ -59,7 +77,9 @@ export class UserService {
                 select: {
                     links: {
                         select: {
-                            url: true
+                            url: true,
+                            shortUrl: true,
+                            clicks: true
                         }
                     },
                 },
@@ -88,7 +108,7 @@ export class UserService {
                 throw HttpException.forbidden("invalid uRL")
 
             const code = this.generateCode(6);
-            const shortUrl = 'http://localhost:3000/' + code
+            const shortUrl = `http://localhost:${process.env.PORT}/` + code
             await prisma.links.create({
                 data: {
                     url,

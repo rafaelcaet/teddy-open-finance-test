@@ -29,6 +29,12 @@ export default class UserController {
 
   }
 
+
+  async checkClicks(code: string): Promise<any> {
+
+    return this.userService.checkClicks(code)
+  }
+
   /**
    * delete a user record on db
    * @param wallet:string

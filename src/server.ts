@@ -30,7 +30,7 @@ export default async function mount() {
 }
 
 mount().then(async (server) => {
-    const port = 3000;
+    const port = +process.env.PORT;
     const host = process.env.HOST;
     const { app } = server;
     app.listen(

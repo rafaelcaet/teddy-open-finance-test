@@ -8,15 +8,15 @@ datasource db {
 }
 
 model Links {
-  id          Int       @id @default(autoincrement())
-  url         String    @db.VarChar(255)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @default(now()) @updatedAt
-  deletedAt   DateTime?
-  userId      Int?
-  shortUrl    String    @db.VarChar(255)
-  clicksCount Int       @default(0)
-  user        Users?    @relation(fields: [userId], references: [id])
+  id        Int       @id @default(autoincrement())
+  url       String    @db.VarChar(255)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  deletedAt DateTime?
+  userId    Int?
+  shortUrl  String    @unique @db.VarChar(255)
+  clicks    Int       @default(0)
+  user      Users?    @relation(fields: [userId], references: [id])
 }
 
 model Users {

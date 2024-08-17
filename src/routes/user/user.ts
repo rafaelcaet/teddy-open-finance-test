@@ -30,8 +30,8 @@ export const getByEmail = async (req: FastifyRequest, res: FastifyReply) => {
 
 /**
  * delete one user
- * @param req:DecoratedRequest
- * @param res:FastifyReply
+ * @param req
+ * @param res
  */
 export const deleteOne = async (req: FastifyRequest, res: FastifyReply) => {
     const { id } = req.params as IUSerParams;
@@ -52,6 +52,15 @@ export const getLinks = async (req: FastifyRequest, res: FastifyReply) => {
     res.send(result);
 };
 
+export const checkClicks = async (req: FastifyRequest, res: FastifyReply) => {
+
+    const { code } = req.params as { code: string };
+    const userController = new UserController();
+    const result = await userController.checkClicks(code);
+    res.send(result);
+}
+
+
 /**
  * add links to user
  * @param req
@@ -66,8 +75,8 @@ export const addLink = async (req: FastifyRequest, res: FastifyReply) => {
 };
 /**
  * update a user
- * @param req:IResquest
- * @param res:FastifyReply
+ * @param req
+ * @param res
  */
 export const update = async (req: FastifyRequest, res: FastifyReply) => {
     const { id } = req.params as IUSerParams;
