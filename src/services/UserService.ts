@@ -24,11 +24,11 @@ export class UserService {
         return userId.id
     }
 
-    async getUserById(userId: number): Promise<{ email: string, links: any }> {
+    async getUserByEmail(userEmail: string): Promise<{ email: string, links: any }> {
         try {
 
             const { email, links } = await prisma.users.findUnique({
-                where: { id: +userId }, select: { email: true, links: true }
+                where: { email: userEmail }, select: { email: true, links: true }
             });
             return { email, links }
         } catch (err) { throw HttpException.userNotFound() }

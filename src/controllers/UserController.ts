@@ -21,11 +21,11 @@ export default class UserController {
 
   /**
    * get a user record from db
-   * @param id:number
+   * @param email:number
    */
-  async getById(id: number): Promise<any> {
+  async getByEmail(email: string): Promise<any> {
 
-    return this.userService.getUserById(id)
+    return this.userService.getUserByEmail(email)
 
   }
 

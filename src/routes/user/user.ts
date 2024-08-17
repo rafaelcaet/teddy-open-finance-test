@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import UserController from "../../controllers/UserController";
 import { IUSerParams } from "../../interfaces/IUserParams";
 import { IUser } from "../../interfaces/IUser";
-import { FastifyJWT } from "@fastify/jwt";
 
 
 /**
@@ -22,12 +21,11 @@ export const createOne = async (req: FastifyRequest, res: FastifyReply) => {
  * @param req
  * @param res
 */
-export const getById = async (req: FastifyRequest, res: FastifyReply) => {
+export const getByEmail = async (req: FastifyRequest, res: FastifyReply) => {
     const { email } = req.user as { email: string }
-    const { id } = req.params as IUSerParams;
     const userController = new UserController()
-    const result = await userController.getById(id);
-    res.send({ result, userEmail: email });
+    const result = await userController.getByEmail(email);
+    res.send(result);
 };
 
 /**

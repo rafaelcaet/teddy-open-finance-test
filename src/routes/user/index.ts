@@ -2,7 +2,7 @@ import {
     addLink,
     createOne,
     deleteOne,
-    getById,
+    getByEmail,
     getLinks,
     update,
 } from './user';
@@ -21,7 +21,7 @@ export const user = async (app: any) => {
         deleteOne,
     );
 
-    app.get('/', { preValidation: [app.authenticate] }, getById)
+    app.get('/', { preValidation: [app.authenticate] }, getByEmail)
     app.get('/urls', { preValidation: [app.authenticate] }, getLinks);
 
     app.put(
