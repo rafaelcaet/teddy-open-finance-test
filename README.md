@@ -88,4 +88,4 @@ This project is a URL shortener application built with Fastify, TypeScript, and 
 - **POST `/auth/login`**: Login to the application and receive a JWT.
 
 ## Contact
-For any questions or feedback, please reach out to [fael.caetsantos@gmail.com.com](mailto:fael.caetsantos@gmail.com).
+For any questions or feedback, please reach out to [fael.caetsantos@gmail.com](mailto:fael.caetsantos@gmail.com).
