@@ -47,6 +47,7 @@ This project is a URL shortener application built with Fastify, TypeScript, and 
 3. **Set up the environment:**
    - Configure your `.env` file with the necessary environment variables for your database and JWT secrets. `.env-example`
    - To connect to the database, just fill up the following variables on .env file:
+
           DATABASE_URL=
           PORT=
           HOST= 
