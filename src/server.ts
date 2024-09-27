@@ -18,6 +18,7 @@ export default async function mount() {
         origin: '*',
     });
 
+    
     /* Register JWT */
     await app.register(jwtPlugin)
 
