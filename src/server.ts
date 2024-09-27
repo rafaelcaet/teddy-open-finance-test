@@ -13,6 +13,9 @@ export default async function mount() {
     const app = fastify({ logger: true });
 
     
+
+
+    
     await app.register(cors, {
         methods: 'HEAD, OPTIONS, PUT, POST, PATCH, GET, DELETE',
         allowedHeaders: 'content-type, authorization, x-usr-addr',
